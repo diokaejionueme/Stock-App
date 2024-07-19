@@ -1,5 +1,4 @@
 import { dates } from '/utils/dates'
-import OpenAI from 'openai'
 
 const tickersArr = []
 
@@ -42,16 +41,19 @@ async function fetchStockData() {
     loadingArea.style.display = 'flex'
     try {
         const stockData = await Promise.all(tickersArr.map(async (ticker) => {
-            const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${dates.startDate}/${dates.endDate}?apiKey=${import.meta.env.VITE_POLYGON_API_KEY}`
+          /*   const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${dates.startDate}/${dates.endDate}?apiKey=${import.meta.env.VITE_POLYGON_API_KEY}`
+            const response = await fetch(url) */
+
+            const url = `https://polygon-api-worker.diokajr.workers.dev/?ticker=${ticker}&startDate=${dates.startDate}&endDate=${dates.endDate}`
+
             const response = await fetch(url)
-            const data = await response.text()
-            const status = await response.status
-            if (status === 200) {
-                apiMessage.innerText = 'Creating report...'
-                return data
-            } else {
-                loadingArea.innerText = 'There was an error fetching stock data.'
+            if (!response.ok) {
+                const errMsg = await response.text()
+                throw new Error('Worker error: ' + errMsg)
             }
+            apiMessage.innerText = 'Creating report...'
+            return response.text()
+
         }))
         fetchReport(stockData.join(''))
     } catch(err) {
@@ -62,14 +64,6 @@ async function fetchStockData() {
 
 async function fetchReport(data) {
     /** AI goes here **/
-
-    try{
-
-    console.log(data)
-    const openai = new OpenAI({
-        dangerouslyAllowBrowser: true, 
-        apiKey: import.meta.env.VITE_OPENAI_API_KEY
-    })
 
     const messages = [
         {
@@ -88,18 +82,33 @@ async function fetchReport(data) {
             ` 
         }
     ]
+      /*
+      Challenge:
+        1. Make a fetch request to the Worker url:
+          - The method should be 'POST'
+          - In the headers, the 'Content-Type' should be 'application/json'
+          - Set the body of the request to an empty string for now
+        2. Parse the response to a JavaScript object and assign it to a const
+        3. Log the response to the console to test
+    */
 
-    const response = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        messages: messages,
-        max_tokens: 350,
-        presence_penalty: 0,
-        frequency_penalty: 0
-    })
+    try{
+        const url = "https://openai-api-worker.diokajr.workers.dev/"
+        const response  = await fetch(url, {
+        
+            method: 'POST', 
+            body: JSON.stringify(messages),
+            headers: {'Content-Type': 'application/json'}
+        })
 
-    console.log(response)
+       const data = await response.json();
+        if(!response.ok){
+            throw new Error(`Worker Error ${data.error}`);
+        }
+         // we were doing this before rendering: console.log(data)
+       renderReport(data.content)
 
-    renderReport(response.choices[0].message.content)
+    //renderReport(response.choices[0].message.content)
     
 }catch(err){
     console.log('Error:', err)
