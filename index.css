@@ -101,6 +101,8 @@ label {
 
 .form-input-control {
     display: flex;
+    align-items: center;
+    justify-content: center;
     width: 70%;
 }
 
