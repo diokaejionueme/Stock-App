@@ -100,9 +100,9 @@ label {
 }
 
 .form-input-control {
+    margin: 0 auto;
     display: flex;
     justify-content: center;
-    width: 70%;
 }
 
 input[type="text"] {
