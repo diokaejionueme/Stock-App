@@ -1,21 +1,26 @@
-# cof7949fc8d07b8107226dc57
+# Doddgy Dave Stock App
 
-Quick start:
+## About
+
+This Stock App was designed with OpenAI's API and Polygon's API and Hosted using Cloudflare's workers and pages.
+
+A live Demo of the app can be found [here](https://stock-predictions-ai-app-ecl.pages.dev/)
+
+While working on this project, I used Polygon's API to extract stock data over a range of days-as specified by the user, and then leveraged the tools available via OpenAI's Generative Pre-trained Transformer language model(GPT) to anaylze the data received, summarize it and give informed predictions based on it.
+
+Furthermore, I opted to use Cloudflare to host the site because of the Robust tools and real-time analytical data made accessible via Cloudfare Workers
+
+## Installation
+
+Install the dependencies and run the project
 
 ```
-$ npm install
-$ npm start
-````
 
-Head over to https://vitejs.dev/ to learn more about using vite
-## About Scrimba
+npm install
+npm start
 
-At Scrimba our goal is to create the best possible coding school at the cost of a gym membership! 💜
-If we succeed with this, it will give anyone who wants to become a software developer a realistic shot at succeeding, regardless of where they live and the size of their wallets 🎉
-The Frontend Developer Career Path aims to teach you everything you need to become a Junior Developer, or you could take a deep-dive with one of our advanced courses 🚀
+```
 
-- [Our courses](https://scrimba.com/allcourses)
-- [The Frontend Career Path](https://scrimba.com/learn/frontend)
-- [Become a Scrimba Pro member](https://scrimba.com/pricing)
+### Contributors
 
-Happy Coding!
+[Scrimba](https://v2.scrimba.com/home)
